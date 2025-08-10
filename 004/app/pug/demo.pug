@@ -1,0 +1,44 @@
+//- Завдання 2
+//- Створити інлайновий текст <p>This is plain old <em>text</em> content.</p> в Pug.
+p This is plain old
+    em text
+    |  content.
+p This is plain old #[em text] content.
+
+//- Завдання 3
+//- Створити даний фрагмент HTML в Pug за допомогою всіх доступних варіантів передачі тексту. <html>
+//- <body>
+//- <p>Indenting the body tag here would make no difference.</p>
+//- <p>HTML itself isn't whitespace-sensitive.</p>
+//- </body>
+//- </html>
+html
+    body
+        p.
+            Indenting the body tag here would make no difference.
+        p
+            | HTML itself isn't
+            | whitespace-sensitive.
+
+//- Завдання 4
+//- Створити довільний Piped Text (приклад виконання внизу)
+//- p
+//- | The pipe always goes at the beginning of its own line,
+//- | not counting indentation.
+p
+    | Lorem ipsum dolor sit amet.
+    | Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+    | Architecto magni accusamus eligendi fugiat quae, iure et, vel dicta consequatur,
+    | reprehenderit placeat id dignissimos aliquam odit ex nam asperiores quas deleniti?
+
+//- Завдання 5
+//- Створити довільний Блоковий текст (приклад виконання внизу) div
+//- p This text belongs to the paragraph tag.
+//- br
+//- .
+//- This text belongs to the div tag.
+div
+    p Lorem ipsum dolor sit amet consectetur adipisicing.
+    br
+    .
+        Lorem ipsum dolor sit amet.
