@@ -1,0 +1,51 @@
+//- Це бачимо тільки у Pug
+// Це бачимо у Pug та HTML
+
+// Завдання 2
+// Створити <a id="main-link"></a>
+// використовуючи швидкий синтаксис додавання ідентифікатора
+//
+p Task 05-2
+a#main-link id main-link
+br
+- var id = 'main-link';
+a(id=`${id}`) main-link
+br
+// Завдання 3 Створити багаторядковий атрибут
+// <input type="checkbox" name="agreement" checked="checked" />
+//
+p Task 05-3
+input(
+    type="checkbox"
+    name="agreement"
+    checked="checked"
+)
+br
+// Завдання 4 Створити атрибути в лапках. Двома способами відтворити даний тег:
+// <div class="div-class" (click)="play()"></div>
+//
+p Task 05-4
+div(class='div-class', (click)='play()') Div4
+div(class='div-class' '(click)'='play()') Div4
+// Завдання 5 Відтворити логічні атрибути в Pug
+// <input type="checkbox" checked="checked" />
+// <input type="checkbox" />
+// <input type="checkbox" checked="true"/>
+//
+p Task 05-5
+- var isChecked = true;
+input(type='checkbox' checked=isChecked)
+- isChecked = false;
+input(type='checkbox' checked=isChecked)
+- isChecked = 'true';
+input(type='checkbox' checked=isChecked)
+input(type='checkbox' checked=true.toString())
+br
+
+// Завдання 6
+// Передати атрибути за допомогою об’єкта &attributes
+// <div id="foo" data-bar="foo" data-foo="bar"></div>
+//
+p Task 05-6
+- var attributes = { id: 'foo', 'data-bar': 'foo', 'data-foo': 'bar' }
+div&attributes(attributes) Div6
