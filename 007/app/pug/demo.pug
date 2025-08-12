@@ -1,0 +1,57 @@
+//-
+    Завдання 2
+    Створіть умовний рендеринг в темплейті – опишіть свою умову використовуючи if else.
+p Завдання 2
+
+- var user = { name: 'John', age: 32, subscription: 'YouTube' }
+
+if user.age >= 18 && user.subscription
+    p #{user.name} is adult and have subscription on #{user.subscription}
+else if user.age >= 18
+    p #{user.name} is adult
+else
+    p #{user.name} is NOT 
+|
+|
+//-
+    Завдання 3
+    Використайте оператор unless, а після цього замініть його нативним способом Pug.
+p Завдання 3
+
+- var user = { name: 'John', age: 32, subscription: 'YouTube', isLoggedIn: true }
+
+unless user.isLoggedIn
+    if user.age >= 18 && user.subscription
+        p #{user.name} is logged IN and adult and have subscription on #{user.subscription}
+    else if user.age >= 18
+        p #{user.name} is logged IN and adult
+    else
+        p #{user.name} is logged IN NOT adult
+else
+    p #{user.name} is logged OUT
+|
+//- Нативний способ
+if !user.isLoggedIn
+    if user.age >= 18 && user.subscription
+        p #{user.name} is logged IN and adult and have subscription on #{user.subscription}
+    else if user.age >= 18
+        p #{user.name} is logged IN and adult
+    else
+        p #{user.name} is logged IN NOT adult
+else
+    p #{user.name} is logged OUT
+|
+|
+//-
+    Завдання 4
+    Опишіть власну структуру case when. Не менше 4 різних варіантів.
+p Завдання 4
+
+- var color = "grey"
+
+case color
+    when "red": p.red Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, praesentium.
+    when "blue": p.blue Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, praesentium.
+    when "green": p.green Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, praesentium.
+    when "grey": p.grey Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, praesentium.
+    when "orange": p.orange Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, praesentium.
