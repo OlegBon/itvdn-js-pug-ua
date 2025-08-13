@@ -1,0 +1,18 @@
+doctype html 
+html
+    head
+        block scripts
+            script(src='/scripts/main.js')
+    body
+        block header
+            #header
+                menu
+                - var menuItems = ['Home', 'About', 'Contacts']
+                    ul
+                        each menuItem in menuItems
+                            li= menuItem
+        block content
+        block footer
+            #footer
+                p Copyright 2023
+                block footer-content

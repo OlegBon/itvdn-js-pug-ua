@@ -1,0 +1,13 @@
+//-
+    Завдання 3
+    Опишіть кастомну розмітку сторінки HTML (layout). Після цього використайте цей лейаут та розширте його за допомогою extends.
+extends layouts/layout.pug
+
+append scripts
+    script(src='/scripts/jquery.js')
+
+block content
+    h1 Welcome to our page!
+
+append footer-content
+    p All right reserved
