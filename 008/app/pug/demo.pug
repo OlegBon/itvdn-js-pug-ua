@@ -1,0 +1,68 @@
+//-
+    Завдання 2
+    Написати свій цикл за допомогою each та while.
+    <ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    </ul>
+p Завдання 2
+
+- var nmbrs = [1, 2, 3, 4, 5]
+// each
+|
+ul
+    each nmbr in nmbrs
+        li= nmbr
+|
+// while
+|
+ul
+    - var i = 0
+    while i < nmbrs.length
+        li= nmbrs[i]
+        - i++
+|
+|
+//-
+    Завдання 3
+    Написати свою міксину для даного куска коду.
+    <ul>
+        <li class="pet">cat</li>
+        <li class="pet">dog</li>
+        <li class="pet">pig</li>
+    </ul>
+p Завдання 3
+mixin list(classname, one, two, three)
+    ul
+        li(class=classname)= one
+        li(class=classname)= two
+        li(class=classname)= three
+
++list('pet', 'cat', 'dog', 'pig')
+|
+mixin list2(classname='pet', one='cat', two='dog', three='pig')
+    ul
+        li(class=classname)= one
+        li(class=classname)= two
+        li(class=classname)= three
+
++list2('pet', 'cat', 'dog', 'pig')
+|
+|
+//-
+    Завдання 4
+    Написати свою міксину, яка приймає невідому кількість аргументів, використовуючи синтаксис «решта аргументів» (Rest Arguments).
+p Завдання 4
+
+mixin items(... items)
+    ul
+        each item in items
+            +liItems(item)
+
+mixin liItems(txt)
+    li= txt
+
++items(1, 2, 3, 'hello')
