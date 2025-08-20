@@ -1,0 +1,75 @@
+// Path configuration for Gulp tasks
+// This file defines the source, development, and distribution paths for various assets in the project.
+
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = resolve(__dirname, ".."); // корінь проєкту
+
+const srcRoot = resolve(root, "src");
+const devRoot = resolve(root, "dev");
+const distRoot = resolve(root, "dist");
+
+const paths = {
+  src: {
+    root: srcRoot,
+    pug: [`${srcRoot}/pug/**/*.pug`, `!${srcRoot}/pug/includes/**/*.pug`],
+    scss: `${srcRoot}/scss/**/*.scss`,
+    js: `${srcRoot}/js/**/*.js`,
+    assets: `${srcRoot}/assets/**/*`,
+    fonts: `${srcRoot}/assets/fonts/**/*`,
+    images: `${srcRoot}/assets/images/**/*`,
+    sprite: `${srcRoot}/assets/sprite/**/*`,
+  },
+
+  dev: {
+    root: devRoot,
+    html: `${devRoot}/`,
+    css: `${devRoot}/css`,
+    js: `${devRoot}/js`,
+    assets: `${devRoot}/assets`,
+    fonts: `${devRoot}/assets/fonts`,
+    images: `${devRoot}/assets/images`,
+    sprite: `${devRoot}/assets/sprite`,
+  },
+
+  dist: {
+    root: distRoot,
+    html: `${distRoot}/`,
+    css: `${distRoot}/css`,
+    js: `${distRoot}/js`,
+    assets: `${distRoot}/assets`,
+    fonts: `${distRoot}/assets/fonts`,
+    images: `${distRoot}/assets/images`,
+    sprite: `${distRoot}/assets/sprite`,
+    all: `${distRoot}/**/*`,
+  },
+
+  includes: {
+    pug: `${srcRoot}/pug/includes/**/*.pug`,
+  },
+
+  watch: {
+    pug: `${srcRoot}/pug/**/*.pug`,
+    scss: `${srcRoot}/scss/**/*.scss`,
+    js: `${srcRoot}/js/**/*.js`,
+    assets: `${srcRoot}/assets/**/*`,
+  },
+
+  clean: {
+    dev: `${devRoot}/**/*`,
+    dist: `${distRoot}/**/*`,
+  },
+};
+
+// Додаємо copy окремо після ініціалізації
+paths.copy = {
+  fonts: paths.src.fonts,
+  images: paths.src.images,
+  assets: paths.src.assets,
+};
+
+const getPath = (type, env = "src") => paths?.[env]?.[type];
+
+export { paths, getPath };
