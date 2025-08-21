@@ -6,9 +6,15 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Gulp output
-# app/html/
+# src/
+# dev/
 # dist/
 # build/
+
+# Gulp cache
+.cache/
+.tmp/
+.sass-cache/
 
 # Env config
 .env
@@ -17,8 +23,9 @@ pnpm-debug.log*
 
 # OS-specific
 .DS_Store
-/dist
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 
 # IDEs
 .vscode/
@@ -31,3 +38,9 @@ Thumbs.db
 
 # Git
 .git/
+
+# Temp files
+*.log
+*.tmp
+*.bak
+*.orig
