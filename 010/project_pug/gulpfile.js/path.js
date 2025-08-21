@@ -25,7 +25,7 @@ const paths = {
 
   dev: {
     root: devRoot,
-    html: `${devRoot}/`,
+    html: `${devRoot}`,
     css: `${devRoot}/css`,
     js: `${devRoot}/js`,
     assets: `${devRoot}/assets`,
@@ -51,15 +51,16 @@ const paths = {
   },
 
   watch: {
-    pug: `${srcRoot}/pug/**/*.pug`,
+    pug: [`${srcRoot}/pug/**/*.pug`, `!${srcRoot}/pug/includes/**/*.pug`],
     scss: `${srcRoot}/scss/**/*.scss`,
     js: `${srcRoot}/js/**/*.js`,
     assets: `${srcRoot}/assets/**/*`,
   },
 
   clean: {
-    dev: `${devRoot}/**/*`,
-    dist: `${distRoot}/**/*`,
+    dev: ["dev/**/*", "!dev/cache/**/*"],
+    dist: [`${distRoot}/**/*`],
+    temp: [`${devRoot}/temp/**/*`],
   },
 };
 
