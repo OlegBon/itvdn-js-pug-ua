@@ -4,7 +4,9 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title Pug Template Example
+    // build:css styles/style.min.css
     link(rel="stylesheet", href="/css/styles.css")
+    // /build
   body
     header
       h1 Pug Template Example
@@ -16,5 +18,7 @@ html(lang="en")
       p This template is designed to be simple and easy to understand.
       p You can modify it to suit your needs. 1111
     footer
-      p © 2025 Your Company Name
+      p © 2025 Your Company 
+    // build:js scripts/index.min.js
     script(src="/js/scripts.js")
+    // /build

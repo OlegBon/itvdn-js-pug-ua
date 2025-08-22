@@ -1,4 +1,4 @@
-import { src, dest, watch, series } from "gulp";
+import { src, dest } from "gulp";
 import pug from "gulp-pug";
 import plumber from "gulp-plumber";
 import browserSyncLib from "browser-sync";

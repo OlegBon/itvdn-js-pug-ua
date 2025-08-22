@@ -36,7 +36,7 @@ const paths = {
 
   dist: {
     root: distRoot,
-    html: `${distRoot}/`,
+    html: `${distRoot}`,
     css: `${distRoot}/css`,
     js: `${distRoot}/js`,
     assets: `${distRoot}/assets`,
@@ -57,10 +57,11 @@ const paths = {
     assets: `${srcRoot}/assets/**/*`,
   },
 
+  // Якщо змінюємо структуру папок, потрібно буде оновити ці шляхи
+  // Пам'ятаємо, що dev та dist при зміні назви папки потрібно буде змінити!!!
   clean: {
     dev: ["dev/**/*", "!dev/cache/**/*"],
-    dist: [`${distRoot}/**/*`],
-    temp: [`${devRoot}/temp/**/*`],
+    dist: ["dist/**/*", "!dist/cache/**/*"],
   },
 };
 
@@ -69,6 +70,10 @@ paths.copy = {
   fonts: paths.src.fonts,
   images: paths.src.images,
   assets: paths.src.assets,
+  // devHtml: ["dev/*.html"],
+  // distHtml: ["dist/*.html"],
+  devHtml: `${paths.dev.root}/*.html`,
+  distHtml: `${paths.dist.root}/*.html`,
 };
 
 const getPath = (type, env = "src") => paths?.[env]?.[type];
