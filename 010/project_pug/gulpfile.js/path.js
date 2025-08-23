@@ -9,7 +9,7 @@ const root = resolve(__dirname, ".."); // корінь проєкту
 
 const srcRoot = resolve(root, "src");
 const devRoot = resolve(root, "dev");
-const distRoot = resolve(root, "dist");
+const distRoot = resolve(root, "prod");
 
 const paths = {
   src: {
@@ -58,10 +58,10 @@ const paths = {
   },
 
   // Якщо змінюємо структуру папок, потрібно буде оновити ці шляхи
-  // Пам'ятаємо, що dev та dist при зміні назви папки потрібно буде змінити!!!
+  // Пам'ятаємо, що dev та prod при зміні назви папки потрібно буде змінити!!!
   clean: {
     dev: ["dev/**/*", "!dev/cache/**/*"],
-    dist: ["dist/**/*", "!dist/cache/**/*"],
+    dist: ["prod/**/*", "!prod/cache/**/*"],
   },
 };
 
@@ -70,8 +70,6 @@ paths.copy = {
   fonts: paths.src.fonts,
   images: paths.src.images,
   assets: paths.src.assets,
-  // devHtml: ["dev/*.html"],
-  // distHtml: ["dist/*.html"],
   devHtml: `${paths.dev.root}/*.html`,
   distHtml: `${paths.dist.root}/*.html`,
 };

@@ -4,7 +4,12 @@ import browserSyncLib from "browser-sync";
 
 import { paths } from "./path.js"; // Імпортуємо шляхи з файлу path.js
 import { compileDevPug } from "./templates-pug.js"; // Імпортуємо функції для шаблонів Pug
-import { moveHtml, pathRewriteHtml, validationHtml } from "./templates-html.js"; // Імпортуємо функції для шаблонів HTML
+import {
+  moveHtml,
+  pathRewriteHtml,
+  validateHtml,
+  minifyHtml,
+} from "./templates-html.js"; // Імпортуємо функції для шаблонів HTML
 
 const browserSync = browserSyncLib.create();
 
@@ -45,26 +50,27 @@ const watcherDev = () => {
   watch(paths.dev.html).on("change", browserSync.reload);
 };
 
-// Завдання для спостереження prod
-const watcherProd = () => {
+// Завдання для старту після збірки prod
+const startProd = (done) => {
   browserSync.init({
     server: {
       baseDir: paths.dist.root,
     },
   });
-  watch(paths.dist.all).on("change", browserSync.reload);
+  done();
 };
 
 // Реєстрація завдань
-const watchDevPug = series(compileDevPug, watcherDev);
-
 const dev = series(cleanDevOldFiles, compileDevPug, watcherDev);
 const prod = series(
   cleanProdOldFiles,
   moveHtml,
+  validateHtml,
   pathRewriteHtml,
-  validationHtml
-  // watcherProd
+  minifyHtml,
+  startProd
 );
 
-export { dev, prod, compileDevPug, watchDevPug, cleanDevOldFiles };
+const htmllint = validateHtml;
+
+export { dev, prod, htmllint };

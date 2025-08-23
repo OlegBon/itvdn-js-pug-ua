@@ -1,18 +1,21 @@
 {
-  "name": "pugstart",
+  "name": "pug_project",
   "version": "1.0.0",
-  "description": "All you need to start with pug tool.",
+  "description": "My first project with pug and gulp.",
   "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tasks": "gulp --gulpfile ./gulpfile.js/index.js --tasks"
+    "tasks": "gulp --gulpfile ./gulpfile.js/index.js --tasks",
+    "dev": "gulp --gulpfile ./gulpfile.js/index.js dev",
+    "prod": "gulp --gulpfile ./gulpfile.js/index.js prod",
+    "htmlLint": "gulp --gulpfile ./gulpfile.js/index.js htmllint"
   },
   "keywords": [
     "Pug",
     "Gulp"
   ],
-  "author": "Stanislav Kinash",
+  "author": "OlegBon",
   "license": "ISC",
   "devDependencies": {
     "browser-sync": "^3.0.4",
@@ -22,6 +25,7 @@
     "gulp-plumber": "^1.2.1",
     "gulp-processhtml": "^1.2.0",
     "gulp-pug": "^5.0.0",
+    "html-minifier-terser": "^7.2.0",
     "through2": "^4.0.2"
   }
 }

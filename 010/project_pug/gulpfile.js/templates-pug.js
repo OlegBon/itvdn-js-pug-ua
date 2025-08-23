@@ -17,7 +17,16 @@ const compileDevPug = () => {
       through2.obj(function (file, _, cb) {
         if (file.isBuffer()) {
           let content = file.contents.toString("utf8");
-          content = content.replace(/^\s*\n/, ""); // Видалити перший порожній рядок
+
+          // Видалити перший порожній рядок
+          content = content.replace(/^\s*\n/, "");
+
+          // Прибрати слеші з void-елементів
+          content = content.replace(
+            /<(\b(?:meta|link|img|input|br|hr|source|track)\b[^>]*?)\/>/gi,
+            "<$1>"
+          );
+
           file.contents = Buffer.from(content);
         }
         this.push(file);
