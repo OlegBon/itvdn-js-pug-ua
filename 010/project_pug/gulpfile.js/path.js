@@ -1,5 +1,5 @@
-// Path configuration for Gulp tasks
-// This file defines the source, development, and distribution paths for various assets in the project.
+// Конфігурація шляху для завдань Gulp
+// Цей файл визначає вихідні дані, шляхи розробки та розповсюдження для різних ресурсів проекту
 
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
@@ -16,6 +16,7 @@ const paths = {
     root: srcRoot,
     pug: [`${srcRoot}/pug/**/*.pug`, `!${srcRoot}/pug/includes/**/*.pug`],
     scss: `${srcRoot}/scss/**/*.scss`,
+    scssEntry: `${srcRoot}/scss/main.scss`,
     js: `${srcRoot}/js/**/*.js`,
     assets: `${srcRoot}/assets/**/*`,
     fonts: `${srcRoot}/assets/fonts/**/*`,
@@ -37,7 +38,7 @@ const paths = {
   dist: {
     root: distRoot,
     html: `${distRoot}`,
-    css: `${distRoot}/css`,
+    css: `${distRoot}/styles`,
     js: `${distRoot}/js`,
     assets: `${distRoot}/assets`,
     fonts: `${distRoot}/assets/fonts`,
@@ -72,6 +73,8 @@ paths.copy = {
   assets: paths.src.assets,
   devHtml: `${paths.dev.root}/*.html`,
   distHtml: `${paths.dist.root}/*.html`,
+  devCss: `${paths.dev.css}/*.css`,
+  distCss: `${paths.dist.css}/*.css`,
 };
 
 const getPath = (type, env = "src") => paths?.[env]?.[type];

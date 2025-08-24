@@ -31,7 +31,10 @@ const pathRewriteHtml = () => {
 const validateHtml = () => {
   return src(paths.copy.distHtml)
     .pipe(plumber())
-    .pipe(htmlValidator({ verbose: true }));
+    .pipe(htmlValidator({ verbose: true }))
+    .on("data", (file) => {
+      console.log("Оброблено файли:", file.relative);
+    });
 };
 
 // Мінімізація HTML через html-minifier-terser

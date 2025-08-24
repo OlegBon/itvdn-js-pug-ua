@@ -10,6 +10,7 @@ import {
   validateHtml,
   minifyHtml,
 } from "./templates-html.js"; // Імпортуємо функції для шаблонів HTML
+import { scss2cssDev, postcss2cssProd } from "./styles.js"; // Імпортуємо функції для стилів
 
 const browserSync = browserSyncLib.create();
 
@@ -20,7 +21,7 @@ async function cleanDevOldFiles() {
   });
   console.log(
     deleted.length
-      ? `Видалено ${deleted.length} файлів:\n` +
+      ? `Видалено ${deleted.length}:\n` +
           deleted.map((f) => ` - ${f}`).join("\n")
       : "Нічого не видалено — файлів не знайдено."
   );
@@ -33,7 +34,7 @@ async function cleanProdOldFiles() {
   });
   console.log(
     deleted.length
-      ? `Видалено ${deleted.length} файлів:\n` +
+      ? `Видалено ${deleted.length}:\n` +
           deleted.map((f) => ` - ${f}`).join("\n")
       : "Нічого не видалено — файлів не знайдено."
   );
@@ -47,6 +48,7 @@ const watcherDev = () => {
     },
   });
   watch(paths.watch.pug, compileDevPug);
+  watch(paths.watch.scss, scss2cssDev);
   watch(paths.dev.html).on("change", browserSync.reload);
 };
 
@@ -61,13 +63,14 @@ const startProd = (done) => {
 };
 
 // Реєстрація завдань
-const dev = series(cleanDevOldFiles, compileDevPug, watcherDev);
+const dev = series(cleanDevOldFiles, compileDevPug, scss2cssDev, watcherDev);
 const prod = series(
   cleanProdOldFiles,
   moveHtml,
   validateHtml,
   pathRewriteHtml,
   minifyHtml,
+  postcss2cssProd,
   startProd
 );
 
