@@ -34,7 +34,7 @@ async function cleanOldFiles(env = "dev") {
 }
 
 // Функція для валідації HTML з вибором середовища
-function validateHtml(env = "dist") {
+const validateHtml = (env = "dist") => {
   const target = paths.copy[env === "dev" ? "devHtml" : "distHtml"];
   const startTime = Date.now();
   const processed = [];
@@ -54,12 +54,10 @@ function validateHtml(env = "dist") {
         showSize: true,
       });
     });
-}
+};
 
 // Завдання для спостереження dev
 const watcherDev = () => {
-  logSummary(); // показує статистику перед запуском watcher
-
   browserSync.init({
     server: { baseDir: paths.dev.root },
   });
@@ -71,8 +69,6 @@ const watcherDev = () => {
 
 // Завдання для старту після збірки prod
 const startProd = (done) => {
-  logSummary(); // показує статистику перед запуском watcher
-
   browserSync.init({
     server: {
       baseDir: paths.dist.root,
@@ -97,6 +93,7 @@ const dev = series(
   compileDevPug,
   validateHtmlDev,
   scss2cssDev,
+  logSummary("dev"),
   watcherDev
 );
 const prod = series(
@@ -106,6 +103,7 @@ const prod = series(
   pathRewriteHtml,
   minifyHtml,
   postcss2cssProd,
+  logSummary("prod"),
   startProd
 );
 

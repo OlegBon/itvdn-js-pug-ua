@@ -52,15 +52,25 @@ const logTask = ({
 };
 
 // Функція для логування загальної статистики
-const logSummary = () => {
-  console.log(chalk.bgBlue.white.bold("\nЗагальна статистика білду"));
-  console.log(chalk.white(`Файлів оброблено: ${summary.totalFiles}`));
-  console.log(
-    chalk.white(`Загальний розмір: ${formatSize(summary.totalSize)}`)
-  );
-  console.log(chalk.white(`Загальний час: ${summary.totalTime} мс\n`));
+const logSummary = (env = "dev") => {
+  const task = (done) => {
+    console.log(chalk.bgBlue.white.bold("\nЗагальна статистика білду"));
+    console.log(chalk.white(`Файлів оброблено: ${summary.totalFiles}`));
+    console.log(
+      chalk.white(`Загальний розмір: ${formatSize(summary.totalSize)}`)
+    );
+    console.log(chalk.white(`Загальний час: ${summary.totalTime} мс\n`));
 
-  summary = { totalFiles: 0, totalSize: 0, totalTime: 0 };
+    summary = { totalFiles: 0, totalSize: 0, totalTime: 0 };
+    console.log(`✔ Завдання ${env} завершено\n`);
+
+    done();
+  };
+
+  // Встановлюємо ім'я завдання для кращої ідентифікації
+  Object.defineProperty(task, "name", { value: `logSummary:${env}` });
+
+  return task;
 };
 
 export { logTask, logSummary };
