@@ -1,6 +1,4 @@
 import { src, dest } from "gulp";
-import plumber from "gulp-plumber";
-import htmlValidator from "gulp-html";
 import processhtml from "gulp-processhtml";
 import { minify } from "html-minifier-terser";
 import through2 from "through2";
@@ -22,19 +20,9 @@ const pathRewriteHtml = () => {
   return src(paths.copy.devHtml)
     .pipe(processhtml())
     .on("data", (file) => {
-      console.log("Оброблено файли:", file.relative);
+      console.log("[dist] Оброблено файли:", file.relative);
     })
     .pipe(dest(paths.dist.html));
-};
-
-// Валідація HTML через gulp-html
-const validateHtml = () => {
-  return src(paths.copy.distHtml)
-    .pipe(plumber())
-    .pipe(htmlValidator({ verbose: true }))
-    .on("data", (file) => {
-      console.log("Оброблено файли:", file.relative);
-    });
 };
 
 // Мінімізація HTML через html-minifier-terser
@@ -55,4 +43,4 @@ const minifyHtml = () => {
     .pipe(dest(paths.dist.html));
 };
 
-export { moveHtml, pathRewriteHtml, validateHtml, minifyHtml };
+export { moveHtml, pathRewriteHtml, minifyHtml };
