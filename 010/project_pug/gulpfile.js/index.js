@@ -21,7 +21,6 @@ async function cleanOldFiles(env = "dev") {
 
   const files = deletedPaths.map((path) => ({
     relative: path,
-    contents: Buffer.alloc(0), // порожній буфер, щоб не було помилки при .length
   }));
 
   logTask({
