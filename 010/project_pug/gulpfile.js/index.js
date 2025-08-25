@@ -5,6 +5,8 @@ import htmlValidator from "gulp-html";
 import browserSyncLib from "browser-sync";
 
 import { paths } from "./path.js"; // Імпортуємо шляхи з файлу path.js
+import { logTask, logSummary } from "./logger.js"; // Імпортуємо функцію логування
+
 import { compileDevPug } from "./templates-pug.js"; // Імпортуємо функції для шаблонів Pug
 import { moveHtml, pathRewriteHtml, minifyHtml } from "./templates-html.js"; // Імпортуємо функції для шаблонів HTML
 import { scss2cssDev, postcss2cssProd } from "./styles.js"; // Імпортуємо функції для стилів
@@ -13,35 +15,55 @@ const browserSync = browserSyncLib.create();
 
 // Функція для видалення старих файлів у dev або prod
 async function cleanOldFiles(env = "dev") {
+  const startTime = Date.now();
   const targets = paths.clean[env];
-  const deleted = await deleteAsync(targets, { force: true });
+  const deletedPaths = await deleteAsync(targets, { force: true });
 
-  console.log(
-    deleted.length
-      ? `[${env}] Видалено ${deleted.length}:\n` +
-          deleted.map((f) => ` - ${f}`).join("\n")
-      : `[${env}] Нічого не видалено — файлів не знайдено.`
-  );
+  const files = deletedPaths.map((path) => ({
+    relative: path,
+    contents: Buffer.alloc(0), // порожній буфер, щоб не було помилки при .length
+  }));
+
+  logTask({
+    env,
+    label: "Очищення файлів",
+    files,
+    startTime,
+    showSize: false, // true, якщо потрібно бачити (0 Б)
+  });
 }
 
 // Функція для валідації HTML з вибором середовища
 function validateHtml(env = "dist") {
   const target = paths.copy[env === "dev" ? "devHtml" : "distHtml"];
+  const startTime = Date.now();
+  const processed = [];
+
   return src(target)
     .pipe(plumber())
     .pipe(htmlValidator({ verbose: true }))
     .on("data", (file) => {
-      console.log(`[${env}] Валідація:`, file.relative);
+      processed.push(file);
+    })
+    .on("end", () => {
+      logTask({
+        env,
+        label: "Валідація HTML",
+        files: processed,
+        startTime,
+        showSize: true,
+      });
     });
 }
 
 // Завдання для спостереження dev
 const watcherDev = () => {
+  logSummary(); // показує статистику перед запуском watcher
+
   browserSync.init({
-    server: {
-      baseDir: paths.dev.root,
-    },
+    server: { baseDir: paths.dev.root },
   });
+
   watch(paths.watch.pug, compileDevPug);
   watch(paths.watch.scss, scss2cssDev);
   watch(paths.dev.html).on("change", browserSync.reload);
@@ -49,6 +71,8 @@ const watcherDev = () => {
 
 // Завдання для старту після збірки prod
 const startProd = (done) => {
+  logSummary(); // показує статистику перед запуском watcher
+
   browserSync.init({
     server: {
       baseDir: paths.dist.root,

@@ -5,11 +5,15 @@ import browserSyncLib from "browser-sync";
 import through2 from "through2";
 
 import { paths } from "./path.js"; // Імпортуємо шляхи з файлу path.js
+import { logTask } from "./logger.js"; // Імпортуємо функцію логування
 
 const browserSync = browserSyncLib.create();
 
 // Завдання для компіляції Pug з обробкою першого порожнього рядка
 const compileDevPug = () => {
+  const startTime = Date.now();
+  const processed = [];
+
   return src(paths.src.pug)
     .pipe(plumber())
     .pipe(pug({ pretty: true }))
@@ -29,11 +33,21 @@ const compileDevPug = () => {
 
           file.contents = Buffer.from(content);
         }
+        processed.push(file);
         this.push(file);
         cb();
       })
     )
     .pipe(dest(paths.dev.html))
+    .on("end", () => {
+      logTask({
+        env: "dev",
+        label: "Компіляція Pug",
+        files: processed,
+        startTime,
+        showSize: true,
+      });
+    })
     .pipe(browserSync.stream());
 };
 

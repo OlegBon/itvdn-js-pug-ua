@@ -5,28 +5,55 @@ import through2 from "through2";
 import browserSyncLib from "browser-sync";
 
 import { paths } from "./path.js"; // Імпортуємо шляхи з файлу path.js
+import { logTask } from "./logger.js"; // Імпортуємо функцію логування
 
 const browserSync = browserSyncLib.create();
 
 // Переміщення HTML + live reload
 const moveHtml = () => {
+  const startTime = Date.now();
+  const processed = [];
+
   return src(`${paths.dev.html}/*.html`)
+    .on("data", (file) => processed.push(file))
     .pipe(dest(paths.dist.html))
-    .pipe(browserSync.stream());
+    .pipe(browserSync.stream())
+    .on("end", () => {
+      logTask({
+        env: "dist",
+        label: "Переміщення HTML",
+        files: processed,
+        startTime,
+        showSize: true,
+      });
+    });
 };
 
 // Переписування шляхів у HTML
 const pathRewriteHtml = () => {
+  const startTime = Date.now();
+  const processed = [];
+
   return src(paths.copy.devHtml)
     .pipe(processhtml())
-    .on("data", (file) => {
-      console.log("[dist] Оброблено файли:", file.relative);
-    })
-    .pipe(dest(paths.dist.html));
+    .on("data", (file) => processed.push(file))
+    .pipe(dest(paths.dist.html))
+    .on("end", () => {
+      logTask({
+        env: "dist",
+        label: "Переписування шляхів у HTML",
+        files: processed,
+        startTime,
+        showSize: true,
+      });
+    });
 };
 
 // Мінімізація HTML через html-minifier-terser
 const minifyHtml = () => {
+  const startTime = Date.now();
+  const processed = [];
+
   return src(paths.copy.distHtml)
     .pipe(
       through2.obj(async function (file, _, cb) {
@@ -37,10 +64,20 @@ const minifyHtml = () => {
           minifyCSS: true,
         });
         file.contents = Buffer.from(result);
+        processed.push(file);
         cb(null, file);
       })
     )
-    .pipe(dest(paths.dist.html));
+    .pipe(dest(paths.dist.html))
+    .on("end", () => {
+      logTask({
+        env: "dist",
+        label: "Мінімізація HTML",
+        files: processed,
+        startTime,
+        showSize: true,
+      });
+    });
 };
 
 export { moveHtml, pathRewriteHtml, minifyHtml };
