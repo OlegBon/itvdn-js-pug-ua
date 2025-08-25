@@ -49,9 +49,7 @@ const postcss2cssProd = () => {
 
   return src(paths.copy.devCss)
     .pipe(plumber())
-    .pipe(sourcemaps.init())
     .pipe(postcss(plugins))
-    .pipe(sourcemaps.write())
     .pipe(rename("style.min.css"))
     .pipe(dest(paths.dist.css))
     .on("data", (file) => processed.push(file))
