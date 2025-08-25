@@ -14,24 +14,11 @@ import { scss2cssDev, postcss2cssProd } from "./styles.js"; // Імпортує�
 
 const browserSync = browserSyncLib.create();
 
-// Функція для видалення старих файлів у dev
-async function cleanDevOldFiles() {
-  const deleted = await deleteAsync(paths.clean.dev, {
-    force: true,
-  });
-  console.log(
-    deleted.length
-      ? `Видалено ${deleted.length}:\n` +
-          deleted.map((f) => ` - ${f}`).join("\n")
-      : "Нічого не видалено — файлів не знайдено."
-  );
-}
+// Функція для видалення старих файлів у dev або prod
+async function cleanOldFiles(env = "dev") {
+  const targets = paths.clean[env];
+  const deleted = await deleteAsync(targets, { force: true });
 
-// Функція для видалення старих файлів у prod
-async function cleanProdOldFiles() {
-  const deleted = await deleteAsync(paths.clean.dist, {
-    force: true,
-  });
   console.log(
     deleted.length
       ? `Видалено ${deleted.length}:\n` +
@@ -63,6 +50,12 @@ const startProd = (done) => {
 };
 
 // Реєстрація завдань
+
+// Завдання для видалення старих файлів
+const cleanDevOldFiles = () => cleanOldFiles("dev");
+const cleanProdOldFiles = () => cleanOldFiles("dist");
+
+// Основні завдання
 const dev = series(cleanDevOldFiles, compileDevPug, scss2cssDev, watcherDev);
 const prod = series(
   cleanProdOldFiles,
@@ -74,6 +67,8 @@ const prod = series(
   startProd
 );
 
+// Додаткове завдання
 const htmllint = validateHtml;
 
+// Експорт завдань
 export { dev, prod, htmllint };
