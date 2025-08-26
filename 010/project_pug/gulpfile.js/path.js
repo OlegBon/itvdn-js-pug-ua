@@ -28,7 +28,7 @@ const paths = {
     root: devRoot,
     html: `${devRoot}`,
     css: `${devRoot}/css`,
-    js: `${devRoot}/js`,
+    js: `${devRoot}/scripts`,
     assets: `${devRoot}/assets`,
     fonts: `${devRoot}/assets/fonts`,
     images: `${devRoot}/assets/images`,
@@ -39,7 +39,7 @@ const paths = {
     root: distRoot,
     html: `${distRoot}`,
     css: `${distRoot}/styles`,
-    js: `${distRoot}/js`,
+    js: `${distRoot}/scripts/js`,
     assets: `${distRoot}/assets`,
     fonts: `${distRoot}/assets/fonts`,
     images: `${distRoot}/assets/images`,
@@ -75,6 +75,8 @@ paths.copy = {
   distHtml: `${paths.dist.root}/*.html`,
   devCss: `${paths.dev.css}/*.css`,
   distCss: `${paths.dist.css}/*.css`,
+  devJs: `${paths.dev.js}/*.js`,
+  distJs: `${paths.dist.js}/*.js`,
 };
 
 const getPath = (type, env = "src") => paths?.[env]?.[type];

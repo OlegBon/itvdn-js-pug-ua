@@ -1,4 +1,4 @@
-import { src, watch, series } from "gulp";
+import { src, watch, series, parallel } from "gulp";
 import { deleteAsync } from "del";
 import plumber from "gulp-plumber";
 import htmlValidator from "gulp-html";
@@ -10,8 +10,17 @@ import { logTask, logSummary } from "./logger.js"; // Імпортуємо фу�
 import { compileDevPug } from "./templates-pug.js"; // Імпортуємо функції для шаблонів Pug
 import { moveHtml, pathRewriteHtml, minifyHtml } from "./templates-html.js"; // Імпортуємо функції для шаблонів HTML
 import { scss2cssDev, postcss2cssProd } from "./styles.js"; // Імпортуємо функції для стилів
+import { moveScripts, scriptLint, jsModify } from "./scripts.js"; // Імпортуємо функції для скриптів
 
 const browserSync = browserSyncLib.create();
+
+// Іменовані функції-обгортки для виклику з вибором середовища
+const moveScriptsSrc = () => moveScripts("src");
+const moveScriptsDev = () => moveScripts("dev");
+const lintScriptsDev = () => scriptLint("dev");
+const lintScriptsDist = () => scriptLint("dist");
+const logDevSummary = logSummary("dev");
+const logProdSummary = logSummary("prod");
 
 // Функція для видалення старих файлів у dev або prod
 async function cleanOldFiles(env = "dev") {
@@ -56,13 +65,14 @@ const validateHtml = (env = "dist") => {
 };
 
 // Завдання для спостереження dev
-const watcherDev = () => {
+const watcherSrc = () => {
   browserSync.init({
     server: { baseDir: paths.dev.root },
   });
 
   watch(paths.watch.pug, compileDevPug);
   watch(paths.watch.scss, scss2cssDev);
+  watch(paths.src.js, series(moveScriptsSrc, lintScriptsDev));
   watch(paths.dev.html).on("change", browserSync.reload);
 };
 
@@ -92,23 +102,52 @@ const dev = series(
   compileDevPug,
   validateHtmlDev,
   scss2cssDev,
-  logSummary("dev"),
-  watcherDev
+  moveScriptsSrc,
+  lintScriptsDev,
+  logDevSummary,
+  watcherSrc
 );
 const prod = series(
   cleanProdOldFiles,
-  moveHtml,
-  validateHtmlProd,
-  pathRewriteHtml,
-  minifyHtml,
-  postcss2cssProd,
-  logSummary("prod"),
+  parallel(
+    series(moveHtml, validateHtmlProd, pathRewriteHtml, minifyHtml),
+    series(postcss2cssProd),
+    series(moveScriptsDev, lintScriptsDist, jsModify)
+  ),
+  logProdSummary,
   startProd
+);
+
+const buildOnlyProd = series(
+  cleanProdOldFiles,
+  parallel(
+    series(moveHtml, validateHtmlProd, pathRewriteHtml, minifyHtml),
+    series(postcss2cssProd),
+    series(moveScriptsDev, lintScriptsDist, jsModify)
+  ),
+  logProdSummary
 );
 
 // Додаткове завдання
 const htmllintDev = validateHtmlDev;
 const htmllintProd = validateHtmlProd;
+const jsLintSrc = () => scriptLint("src");
+const jsLintDev = () => scriptLint("dev");
+const jsLintProd = () => scriptLint("dist");
+const jsBuildProd = jsModify;
+
+const lintAllSrc = parallel(htmllintDev, jsLintSrc);
 
 // Експорт завдань
-export { dev, prod, htmllintDev, htmllintProd };
+export {
+  dev,
+  prod,
+  buildOnlyProd,
+  lintAllSrc,
+  htmllintDev,
+  htmllintProd,
+  jsLintSrc,
+  jsLintDev,
+  jsLintProd,
+  jsBuildProd,
+};
