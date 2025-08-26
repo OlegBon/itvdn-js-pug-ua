@@ -39,7 +39,7 @@ const paths = {
     root: distRoot,
     html: `${distRoot}`,
     css: `${distRoot}/styles`,
-    js: `${distRoot}/scripts/js`,
+    js: `${distRoot}/scripts`,
     assets: `${distRoot}/assets`,
     fonts: `${distRoot}/assets/fonts`,
     images: `${distRoot}/assets/images`,
@@ -63,6 +63,7 @@ const paths = {
   clean: {
     dev: ["dev/**/*", "!dev/cache/**/*"],
     dist: ["prod/**/*", "!prod/cache/**/*"],
+    distJs: ["prod/scripts/**/*", "!prod/scripts/main.min.js"],
   },
 };
 

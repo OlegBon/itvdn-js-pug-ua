@@ -21,6 +21,10 @@
       {
         "allow": ["warn", "error", "log"]
       }
-    ]
+    ],
+    "no-var": "error",
+    "prefer-const": "warn",
+    "arrow-body-style": ["error", "as-needed"],
+    "object-shorthand": ["error", "always"]
   }
 }

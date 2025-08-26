@@ -41,6 +41,25 @@ async function cleanOldFiles(env = "dev") {
   });
 }
 
+// Функція для очищення сирих JS-файлів у prod, залишаючи лише main.min.js
+const cleanRawJs = async () => {
+  const startTime = Date.now();
+
+  const deletedPaths = await deleteAsync(paths.clean.distJs, { force: true });
+
+  const files = deletedPaths.map((path) => ({
+    relative: path,
+  }));
+
+  logTask({
+    env: "prod",
+    label: "Очищення сирих JS-файлів",
+    files,
+    startTime,
+    showSize: false,
+  });
+};
+
 // Функція для валідації HTML з вибором середовища
 const validateHtml = (env = "dist") => {
   const target = paths.copy[env === "dev" ? "devHtml" : "distHtml"];
@@ -114,6 +133,7 @@ const prod = series(
     series(postcss2cssProd),
     series(moveScriptsDev, lintScriptsDist, jsModify)
   ),
+  cleanRawJs,
   logProdSummary,
   startProd
 );
@@ -125,6 +145,7 @@ const buildOnlyProd = series(
     series(postcss2cssProd),
     series(moveScriptsDev, lintScriptsDist, jsModify)
   ),
+  cleanRawJs,
   logProdSummary
 );
 
