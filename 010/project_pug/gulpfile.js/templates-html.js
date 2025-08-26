@@ -1,6 +1,8 @@
 import { src, dest } from "gulp";
 import processhtml from "gulp-processhtml";
 import { minify } from "html-minifier-terser";
+import plumber from "gulp-plumber";
+import htmlValidator from "gulp-html";
 import through2 from "through2";
 import browserSyncLib from "browser-sync";
 
@@ -80,4 +82,27 @@ const minifyHtml = () => {
     });
 };
 
-export { moveHtml, pathRewriteHtml, minifyHtml };
+// Функція для валідації HTML з вибором середовища
+const validateHtml = (env = "dist") => {
+  const target = paths.copy[env === "dev" ? "devHtml" : "distHtml"];
+  const startTime = Date.now();
+  const processed = [];
+
+  return src(target)
+    .pipe(plumber())
+    .pipe(htmlValidator({ verbose: true }))
+    .on("data", (file) => {
+      processed.push(file);
+    })
+    .on("end", () => {
+      logTask({
+        env,
+        label: "Валідація HTML",
+        files: processed,
+        startTime,
+        showSize: true,
+      });
+    });
+};
+
+export { moveHtml, pathRewriteHtml, minifyHtml, validateHtml };

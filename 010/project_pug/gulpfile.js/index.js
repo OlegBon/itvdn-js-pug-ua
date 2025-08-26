@@ -1,14 +1,17 @@
 import { src, watch, series, parallel } from "gulp";
 import { deleteAsync } from "del";
-import plumber from "gulp-plumber";
-import htmlValidator from "gulp-html";
 import browserSyncLib from "browser-sync";
 
 import { paths } from "./path.js"; // Імпортуємо шляхи з файлу path.js
 import { logTask, logSummary } from "./logger.js"; // Імпортуємо функцію логування
 
 import { compileDevPug } from "./templates-pug.js"; // Імпортуємо функції для шаблонів Pug
-import { moveHtml, pathRewriteHtml, minifyHtml } from "./templates-html.js"; // Імпортуємо функції для шаблонів HTML
+import {
+  moveHtml,
+  pathRewriteHtml,
+  minifyHtml,
+  validateHtml,
+} from "./templates-html.js"; // Імпортуємо функції для шаблонів HTML
 import { scss2cssDev, postcss2cssProd } from "./styles.js"; // Імпортуємо функції для стилів
 import { moveScripts, scriptLint, jsModify } from "./scripts.js"; // Імпортуємо функції для скриптів
 
@@ -60,30 +63,7 @@ const cleanRawJs = async () => {
   });
 };
 
-// Функція для валідації HTML з вибором середовища
-const validateHtml = (env = "dist") => {
-  const target = paths.copy[env === "dev" ? "devHtml" : "distHtml"];
-  const startTime = Date.now();
-  const processed = [];
-
-  return src(target)
-    .pipe(plumber())
-    .pipe(htmlValidator({ verbose: true }))
-    .on("data", (file) => {
-      processed.push(file);
-    })
-    .on("end", () => {
-      logTask({
-        env,
-        label: "Валідація HTML",
-        files: processed,
-        startTime,
-        showSize: true,
-      });
-    });
-};
-
-// Завдання для спостереження dev
+// Завдання для спостереження (слідкування за змінами у src, щоб потім збирати dev)
 const watcherSrc = () => {
   browserSync.init({
     server: { baseDir: paths.dev.root },
